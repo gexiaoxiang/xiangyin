@@ -19,12 +19,12 @@ package-lock.json:缓存行文件
 "build": "vue-cli-service build",
 "lint": "vue-cli-service lint"
 },
+
 2.2eslint校验功能关闭
 --在根目录下，创建一个vue.config.js
-比如：声明变量但没有使用eslint校验工具报错
+比如:声明变量但没有使用eslint校验工具报错
 
-
-
+2.3src文件夹的简写方式，配置别名
 jsconfig.json配置别名@提示
 {
     "compileOptions":{
