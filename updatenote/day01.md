@@ -53,3 +53,19 @@ Home首页路由组件、Search路由组件、login组件
 
 
 5路由组件的搭建：Home、Search、Login、Register
+-components:放置非路由组件（全局组件）
+-pages|views:放置路由组件
+5.1项目中配置的路由一般放置在router文件夹中
+
+5.2路由组件一般需要在router文件夹中注册、非路由组件一般以标签的方式使用
+
+$route:一般获取路由信息【路径、query、params等】
+$router:一般进行编程式导航进行路由跳转【push、replace】
+
+5.3路由的跳转
+路由的两种跳转形式：
+声明式导航router-link
+编程式导航push|replace
+
+编程式导航：声明式导航能做的编程式导航都能做，但是编程式导航还可以做一些其他的业务逻辑
+        

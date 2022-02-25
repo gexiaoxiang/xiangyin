@@ -2,7 +2,9 @@
     <div>
 
         <Header></Header>
-        根组件 制作图标
+        <!--书写路由组件出口的地方-->
+        <router-view></router-view>
+
         <Footer></Footer>
 
     </div>
