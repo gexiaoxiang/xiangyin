@@ -68,4 +68,7 @@ $router:一般进行编程式导航进行路由跳转【push、replace】
 编程式导航push|replace
 
 编程式导航：声明式导航能做的编程式导航都能做，但是编程式导航还可以做一些其他的业务逻辑
+
+6.Footer组件：在home、search显示，在login、register隐藏
+6.2配置路由的时候可以配置路由元信息meta
         
