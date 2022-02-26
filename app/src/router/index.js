@@ -7,10 +7,10 @@ Vue.use(VueRouter);
 //重复跳转异常问题
 const VueRouterPush = VueRouter.prototype.push
 const VueRouterReplace = VueRouter.prototype.replace
-VueRouter.prototype.push = function push (to) {
+VueRouter.prototype.push = function push(to) {
     return VueRouterPush.call(this, to).catch(err => err)
 }
-VueRouter.prototype.replace = function replace (to) {
+VueRouter.prototype.replace = function replace(to) {
     return VueRouterReplace.call(this, to).catch(err => err)
 }
 
@@ -25,22 +25,34 @@ export default new VueRouter({
         {
             path: "/home",
             component: Home,
-            meta:{show:true}
+            meta: {show: true}
         },
         {
             path: "/login",
             component: Login,
-            meta:{show:false}
+            meta: {show: false}
         },
         {
             path: "/register",
             component: Register,
-            meta:{show:false}
+            meta: {show: false}
         },
         {
-            path: "/search",
+            path: "/search/:keyword?",//?代表params可传可不传
             component: Search,
-            meta:{show:true}
+            meta: {show: true},
+            name: "search",
+            //路由传递props 3种写法
+            //布尔值写法
+            // props:true,
+            //对象写法
+            // props: {a:1,b:2},
+            //函数写法
+            props: ($route) => {
+                return{
+                    keyword:$route.params.keyword,k:$route.query.k
+                }
+            }
         },
         //重定向，访问/ 立马访问首页
         {

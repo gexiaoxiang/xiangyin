@@ -71,4 +71,7 @@ $router:一般进行编程式导航进行路由跳转【push、replace】
 
 6.Footer组件：在home、search显示，在login、register隐藏
 6.2配置路由的时候可以配置路由元信息meta
-        
+      
+7.路由传参
+params参数:属于路径当中的一部分，在配置路由时需要占位
+query参数：不属于路径当中的一部分

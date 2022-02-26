@@ -34,7 +34,7 @@
             </h1>
             <div class="searchArea">
                 <form action="###" class="searchForm">
-                    <input type="text" id="autocomplete" class="input-error input-xxlarge"/>
+                    <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword"/>
                     <!--编程式导航-->
                     <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">搜索</button>
                 </form>
@@ -45,11 +45,28 @@
 
 <script>
     export default {
-        name: "index",
-        methods:{
+        name: "",
+        data() {
+            return {
+                keyword: ''
+            }
+        },
+        methods: {
             //搜索按钮的回调函数:需要向search路由进行跳转
-            goSearch(){
-                this.$router.replace('/search')
+            goSearch() {
+                //路由传参
+                //第一种：字符串形式
+                // this.$router.push('/search/' + this.keyword + "?k=" + this.keyword)
+                //第二种：模板字符串形式
+                // this.$router.push(`/search/${this.keyword}?k=${this.keyword}`)
+                //第三种：对象写法
+                // this.$router.push({name: "search", params: {keyword: this.keyword}, query: {k: this.keyword}})
+                //使用undefined解决 params为空的情况
+                this.$router.push({name: "search", params: {keyword: '' || undefined}, query: {k: this.keyword}})
+                //路由传递props 3种写法
+                this.$router.push({name: "search", params: {keyword: this.keyword}, query: {k: this.keyword}})
+
+
             }
         }
     }
