@@ -7,12 +7,25 @@ Vue.use(VueRouter);
 //重复跳转异常问题
 const VueRouterPush = VueRouter.prototype.push
 const VueRouterReplace = VueRouter.prototype.replace
-VueRouter.prototype.push = function push(to) {
-    return VueRouterPush.call(this, to).catch(err => err)
+VueRouter.prototype.push = function (location, resolve, reject) {
+    if (resolve && reject) {
+        VueRouterPush.call(this, location, resolve, reject)
+    } else {
+        VueRouterPush.call(this, location, () => {
+        }, () => {
+        })
+    }
 }
-VueRouter.prototype.replace = function replace(to) {
-    return VueRouterReplace.call(this, to).catch(err => err)
+VueRouter.prototype.replace = function (location, resolve, reject) {
+    if (resolve && reject) {
+        VueRouterPush.call(this, location, resolve, reject)
+    } else {
+        VueRouterPush.call(this, location, () => {
+        }, () => {
+        })
+    }
 }
+
 
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
@@ -49,8 +62,8 @@ export default new VueRouter({
             // props: {a:1,b:2},
             //函数写法
             props: ($route) => {
-                return{
-                    keyword:$route.params.keyword,k:$route.query.k
+                return {
+                    keyword: $route.params.keyword, k: $route.query.k
                 }
             }
         },

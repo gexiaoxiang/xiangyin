@@ -62,8 +62,19 @@
                 //第三种：对象写法
                 // this.$router.push({name: "search", params: {keyword: this.keyword}, query: {k: this.keyword}})
                 //使用undefined解决 params为空的情况
-                this.$router.push({name: "search", params: {keyword: '' || undefined}, query: {k: this.keyword}})
+                // this.$router.push({name: "search", params: {keyword: '' || undefined}, query: {k: this.keyword}})
                 //路由传递props 3种写法
+                // this.$router.push({name: "search", params: {keyword: this.keyword}, query: {k: this.keyword}})
+
+                //解决多次执行会抛出NavigationDuplicate错误
+                // this.$router.push({name: "search", params: {keyword: this.keyword}, query: {k: this.keyword}},
+                //     ()=>{
+                //         console.log('1');
+                //     },
+                //     ()=>{
+                //         console.log('2');
+                //     })
+
                 this.$router.push({name: "search", params: {keyword: this.keyword}, query: {k: this.keyword}})
 
 
