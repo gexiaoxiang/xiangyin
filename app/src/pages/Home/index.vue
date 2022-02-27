@@ -1,13 +1,15 @@
 <template>
     <div>
-        <TypeNav></TypeNav>
-        <ListContainer></ListContainer>
-        <Recommend></Recommend>
-        <Rank></Rank>
-        <Like></Like>
-        <Floor></Floor>
-        <Floor></Floor>
-        <Brand></Brand>
+        <!--        <TypeNav></TypeNav>
+                <ListContainer></ListContainer>
+                <Recommend></Recommend>
+                <Rank></Rank>
+                <Like></Like>
+                <Floor></Floor>
+                <Floor></Floor>
+                <Brand></Brand>-->
+
+
     </div>
 </template>
 
@@ -18,6 +20,7 @@
     import Like from '@/pages/Home/Like'
     import Floor from '@/pages/Home/Floor'
     import Brand from '@/pages/Home/Brand'
+
 
     export default {
 
