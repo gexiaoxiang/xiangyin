@@ -6,6 +6,8 @@ Vue.config.productionTip = false
 import TypeNav from '@/pages/Home/TypeNav'
 Vue.component(TypeNav.name,TypeNav)
 
+import {reqCategoryList} from '@/api/api'
+reqCategoryList();
 //引入路由
 import router from '@/router'
 
