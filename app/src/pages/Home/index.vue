@@ -1,10 +1,13 @@
 <template>
-<div>我是首页</div>
+
+    <TypeNav></TypeNav>
 </template>
 
 <script>
     export default {
-        name: ""
+
+        name: "",
+
     }
 </script>
 
