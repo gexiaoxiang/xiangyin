@@ -49,6 +49,7 @@
 <script>
 
     import {mapState} from 'vuex'
+    import throttle from 'lodash/throttle'
 
     export default {
         name: "TypeNav",
@@ -70,9 +71,15 @@
             })
         },
         methods: {
-            changeIndex(index) {
+            // changeIndex(index) {
+            //     this.currentIndex = index
+            //     console.log(index);
+            // },
+            //节流
+            changeIndex:throttle(function (index) {
                 this.currentIndex = index
-            }
+                console.log(index);
+            },50)
         }
     }
 </script>
