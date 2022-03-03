@@ -5,21 +5,25 @@
             <div @mouseleave="changeIndex(-1)">
                 <h2 class="all">全部商品分类</h2>
                 <div class="sort">
-                    <div class="all-sort-list2">
+                    <div class="all-sort-list2" @click="goSearch">
                         <div class="item" v-for="(c1,index) in categoryList" :key="c1.categoryId"
                              :class="{cur:currentIndex==index}">
                             <h3 @mouseenter="changeIndex(index)">
-                                <a href="">{{ c1.categoryName }}</a>
+                                <a :data-categoryName="c1.categoryName" :data-category1id="c1.categoryId"
+                                >{{ c1.categoryName }}</a>
                             </h3>
                             <div class="item-list clearfix" :style="{display:currentIndex==index?'block':'none'}">
                                 <div class="subitem" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
                                     <dl class="fore">
                                         <dt>
-                                            <a href="">{{ c2.categoryName }}</a>
+                                            <a :data-categoryName="c2.categoryName"
+                                               :data-category2id="c2.categoryId">{{ c2.categoryName }}</a>
                                         </dt>
                                         <dd>
                                             <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
-                                                <a href="">{{ c3.categoryName }}</a>
+                                                <a :data-categoryName="c3.categoryName"
+                                                   :data-category3id="c3.categoryId">{{ c3.categoryName }}</a>
+
                                             </em>
 
                                         </dd>
@@ -76,10 +80,33 @@
             //     console.log(index);
             // },
             //节流
-            changeIndex:throttle(function (index) {
+            changeIndex: throttle(function (index) {
                 this.currentIndex = index
-                console.log(index);
-            },50)
+
+            }, 50),
+            //编程式路由导航
+            goSearch(event) {
+
+                let element = event.target;
+                let {categoryname, category1id, category2id, category3id} = element.dataset;
+
+                //如果标签身上有categoryname一定是a标签
+                if (categoryname) {
+                    let location = {name: 'search'};
+                    let query = {categoryName: categoryname}
+                    //一级分类、二级分类、三级分类的标签
+                    if (category1id) {
+                        query.category1Id = category1id;
+                    } else if (category2id) {
+                        query.category2Id = category2id;
+                    } else {
+                        query.category3Id = category3id;
+                    }
+                    location.query = query;
+                    this.$router.push(location)
+                }
+
+            }
         }
     }
 </script>
