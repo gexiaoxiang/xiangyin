@@ -68,8 +68,7 @@
         },
         //组件挂载完毕：可以向服务器发请求
         mounted() {
-            //通知Vuex发请求，获取数据存储于仓库中
-            this.$store.dispatch('categoryList')
+
             //当组件挂载完毕，如果不是home让show属性变为false
             if (this.$route.path != '/home') {
                 this.show = false
