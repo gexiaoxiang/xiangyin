@@ -7,16 +7,16 @@
                 <div class="swiper-container" id="mySwiper">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
-                            <img src="./images//banner1.jpg"/>
+                            <img src="./images/banner1.jpg"/>
                         </div>
 <!--                        <div class="swiper-slide">-->
-<!--                            <img src="./images//banner2.jpg"/>-->
+<!--                            <img src="./images/banner2.jpg"/>-->
 <!--                        </div>-->
 <!--                        <div class="swiper-slide">-->
-<!--                            <img src="./images//banner3.jpg"/>-->
+<!--                            <img src="./images/banner3.jpg"/>-->
 <!--                        </div>-->
 <!--                        <div class="swiper-slide">-->
-<!--                            <img src="./images//banner4.jpg"/>-->
+<!--                            <img src="./images/banner4.jpg"/>-->
 <!--                        </div>-->
                     </div>
                     <!-- 如果需要分页器 -->
@@ -112,8 +112,17 @@
 </template>
 
 <script>
+    import  {mapState} from 'vuex'
     export default {
-        name: ""
+        name: "",
+        mounted() {
+           this.$store.dispatch('getBannerList')
+        },
+        computed:{
+            ...mapState({
+                bannerList:state => state.home.bannerList
+            })
+        }
     }
 </script>
 

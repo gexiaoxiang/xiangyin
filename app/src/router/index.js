@@ -27,10 +27,10 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 }
 
 
-import Home from '@/pages/Home'
-import Login from '@/pages/Login'
-import Register from '@/pages/Register'
-import Search from '@/pages/Search'
+import Home from '@/views/Home'
+import Login from '@/views/Login'
+import Register from '@/views/Register'
+import Search from '@/views/Search'
 
 //配置路由
 export default new VueRouter({
