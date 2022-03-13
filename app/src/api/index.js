@@ -5,3 +5,5 @@ import mockRequests from "@/api/mockAjax";
 export const reqCategoryList = () => requests({url: '/product/getBaseCategoryList', method: 'get'})
 //获取banner
 export const reqGetBannerList = () => mockRequests.get('banner')
+//获取floor数据
+export const reqGetFloorList = () => mockRequests.get('floor')

@@ -1,10 +1,12 @@
 //home模块的小仓库
-import {reqCategoryList, reqGetBannerList} from '@/api'
+import {reqCategoryList, reqGetBannerList, reqGetFloorList} from '@/api'
 
 //仓库存储数据的地方
 const state = {
     categoryList: [],
-    bannerList: []
+    bannerList: [],
+    floorList: [],
+
 };
 //修改state的唯一手段
 const mutations = {
@@ -12,6 +14,8 @@ const mutations = {
         state.categoryList = categoryList;
     }, BANNERLIST(state, bannerList) {
         state.bannerList = bannerList;
+    }, FLOORLIST(state, floorList) {
+        state.floorList = floorList;
     }
 };
 //处理action，可以书写自己业务逻辑
@@ -27,6 +31,13 @@ const actions = {
         const result = await reqGetBannerList();
         if (200 === result.code) {
             commit("BANNERLIST", result.data)
+        }
+
+    },
+    async getFloorList({commit}) {
+        const result = await reqGetFloorList();
+        if (200 === result.code) {
+            commit("FLOORLIST", result.data)
         }
 
     }

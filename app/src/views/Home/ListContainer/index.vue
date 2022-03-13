@@ -4,7 +4,7 @@
         <div class="sortList clearfix">
             <div class="center">
                 <!--banner轮播-->
-                <div class="swiper-container" id="mySwiper">
+                <div class="swiper-container" ref="mySwiper">
                     <div class="swiper-wrapper">
 
                         <div class="swiper-slide" v-for="(banner,index) in bannerList" :key="banner.id">
@@ -123,7 +123,8 @@
             bannerList: {
                 handler(newValue, oldValue) {
                     this.$nextTick(() => {
-                            var mySwiper = new Swiper(document.querySelector('.swiper-container'), {
+                            var mySwiper = new Swiper(
+                                this.$refs.mySwiper, {
                                     loop: true,
 
                                     //如果需要分页器
