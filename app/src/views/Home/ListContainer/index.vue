@@ -121,6 +121,7 @@
         watch: {
             //监听bannerList的数据变化
             bannerList: {
+                immediate: true,
                 handler(newValue, oldValue) {
                     this.$nextTick(() => {
                             var mySwiper = new Swiper(
