@@ -21,4 +21,4 @@ export const reqGetFloorList = () => mockRequests.get('floor')
   "trademark": "4:小米"
 }
  */
-export const reqGetSearchInfo = ({params}) => requests({url: '/list', method: 'post', data: params})
+export const reqGetSearchInfo = (params) => requests({url: '/list', method: 'post', data: params})
