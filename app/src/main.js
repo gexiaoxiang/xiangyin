@@ -13,6 +13,10 @@ Vue.component(Carousel.name, Carousel)
 
 new Vue({
     render: h => h(App),
+    //全局事件总线
+    beforeCreate() {
+        Vue.prototype.$bus = this
+    },
     //注册路由
     router,
     //注册仓库

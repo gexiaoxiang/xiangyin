@@ -12,10 +12,12 @@
                         </li>
                     </ul>
                     <ul class="fl sui-tag">
-                        <li class="with-x">手机</li>
-                        <li class="with-x">iphone<i>×</i></li>
-                        <li class="with-x">华为<i>×</i></li>
-                        <li class="with-x">OPPO<i>×</i></li>
+                        <li class="with-x" v-if="searchParams.categoryName">{{ searchParams.categoryName }}<i
+                                @click="removeCategoryName">x</i></li>
+                        <li class="with-x" v-if="searchParams.keyword">{{ searchParams.keyword }}<i
+                                @click="removeKeyword">x</i></li>
+
+
                     </ul>
                 </div>
 
@@ -141,11 +143,8 @@
             }
         },
         beforeMount() {
-
             Object.assign(this.searchParams, this.$route.query, this.$route.params)
-
-        }
-        ,
+        },
         mounted() {
             this.getData();
         },
@@ -156,6 +155,36 @@
             getData() {
                 this.$store.dispatch('getSearchList', this.searchParams)
             },
+            //删除分类
+            removeCategoryName() {
+
+                this.searchParams.categoryName = undefined
+                this.searchParams.category1Id = undefined
+                this.searchParams.category2Id = undefined
+                this.searchParams.category3Id = undefined
+                // this.getData();
+                //修改地址栏
+                this.$router.push({name: "search", params: this.$route.params})
+
+            },
+            //删除关键字
+            removeKeyword() {
+                this.searchParams.keyword = undefined
+                //修改地址栏
+                this.$router.push({name: "search",query:this.$route.query})
+                //通知兄弟组件Header清除关键字
+                this.$bus.$emit('clear')
+            }
+        },
+        watch: {
+            $route(newValue, oldValue) {
+                this.searchParams.category1Id = undefined
+                this.searchParams.category2Id = undefined
+                this.searchParams.category3Id = undefined
+                Object.assign(this.searchParams, this.$route.query, this.$route.params)
+                this.getData();
+
+            }
         }
     }
 </script>
