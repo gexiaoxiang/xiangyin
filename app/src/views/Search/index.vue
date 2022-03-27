@@ -4,7 +4,7 @@
 
         <div class="main">
             <div class="py-container">
-                <!--bread-->
+                <!--面包屑-->
                 <div class="bread">
                     <ul class="fl sui-breadcrumb">
                         <li>
@@ -12,17 +12,29 @@
                         </li>
                     </ul>
                     <ul class="fl sui-tag">
-                        <li class="with-x" v-if="searchParams.categoryName">{{ searchParams.categoryName }}<i
-                                @click="removeCategoryName">x</i></li>
-                        <li class="with-x" v-if="searchParams.keyword">{{ searchParams.keyword }}<i
-                                @click="removeKeyword">x</i></li>
+                        <!--分类-->
+                        <li class="with-x" v-if="searchParams.categoryName">
+                            {{ searchParams.categoryName }}<i @click="removeCategoryName">x</i>
+                        </li>
+                        <!--关键字-->
+                        <li class="with-x" v-if="searchParams.keyword">
+                            { searchParams.keyword }} <i @click="removeKeyword">x</i>
+                        </li>
+                        <!--品牌-->
+                        <li class="with-x" v-if="searchParams.trademark">
+                            {{ searchParams.trademark.split(':')[1] }}<i @click="removeTrademark">x</i>
+                        </li>
+                        <!--属性-->
+                        <li class="with-x" v-for=" (attrValue,index)  in  searchParams.props" :key="index">
+                            {{ attrValue.split(":")[1] }}<i @click="removeAttr(index)">x</i>
+                        </li>
 
 
                     </ul>
                 </div>
 
                 <!--selector-->
-                <SearchSelector/>
+                <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo"/>
 
                 <!--details-->
                 <div class="details clearfix">
@@ -171,9 +183,34 @@
             removeKeyword() {
                 this.searchParams.keyword = undefined
                 //修改地址栏
-                this.$router.push({name: "search",query:this.$route.query})
+                this.$router.push({name: "search", query: this.$route.query})
                 //通知兄弟组件Header清除关键字
                 this.$bus.$emit('clear')
+            },
+            removeTrademark() {
+                this.searchParams.trademark = undefined
+                this.getData()
+            },
+            //自定义事件回调
+            trademarkInfo(trademark) {
+                this.searchParams.trademark = trademark.tmId + ":" + trademark.tmName
+                this.getData()
+            },
+            //自定义事件回调
+            attrInfo(attr, attrValue) {
+
+                let props = `${attr.attrId}:${attrValue}:${attr.attrName}`
+                //数组去重
+                if (this.searchParams.props.indexOf(props) == -1) {
+                    this.searchParams.props.push(props)
+                }
+
+                this.getData()
+            },
+            //删除售卖的属性
+            removeAttr(index){
+                this.searchParams.props.splice(index,1)
+                this.getData()
             }
         },
         watch: {
