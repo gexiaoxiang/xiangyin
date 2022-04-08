@@ -84,7 +84,12 @@
                         </ul>
                     </div>
 
-                    <Pagination :pageNo="4" :pageSize="3" :total="90" :continues="5"></Pagination>
+                    <Pagination :pageNo="searchParams.pageNo"
+                                :pageSize="searchParams.pageSize"
+                                :total="total"
+                                :continues="5"
+                                @getPageNo="getPageNo"
+                    ></Pagination>
                 </div>
             </div>
         </div>
@@ -93,7 +98,7 @@
 
 <script>
     import SearchSelector from './SearchSelector/SearchSelector'
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapState} from 'vuex'
 
     export default {
         name: 'Search',
@@ -125,6 +130,9 @@
         },
         computed: {
             ...mapGetters(['goodsList', 'trademarkList', 'attrsList']),
+            ...mapState({
+                total: state => state.search.searchList.total
+            }),
             isOne() {
                 return this.searchParams.order.indexOf('1') != -1
             },
@@ -193,7 +201,15 @@
                 let originOrder = this.searchParams.order.split(":")[1]
                 this.searchParams.order = `${flag}:${originOrder == 'asc' ? 'desc' : 'asc'}`
                 this.getData()
+            },
+            //自定义事件d的回调
+            getPageNo(pageNo) {
+
+                this.searchParams.pageNo = pageNo;
+                this.getData()
+
             }
+
         },
         watch: {
             $route(newValue, oldValue) {
