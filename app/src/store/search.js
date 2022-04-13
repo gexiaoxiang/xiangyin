@@ -5,7 +5,7 @@ import {reqGetSearchInfo} from '@/api'
 const state = {
     searchList: {}
 };
-//修改state的唯一手段
+//修改state的唯一手段search
 const mutations = {
     GETSEARCHLIST(state, searchList) {
         state.searchList = searchList
@@ -33,6 +33,7 @@ const getters = {
         return state.searchList.attrsList;
     }
 };
+
 
 export default {
     state,
