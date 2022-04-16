@@ -1,22 +1,57 @@
 <template>
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide" v-for="(slide,index) in skuImageList" :key="slide.id">
-        <img :src="slide.imgUrl">
-      </div>
+    <div class="swiper-container" ref="mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(slide,index) in skuImageList" :key="slide.id">
+                <img :src="slide.imgUrl"
+                     :class="{active:currentIndex==index}"
+                     @click="changeCurrentIndex(index)"
+                >
+            </div>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
     </div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-  </div>
 </template>
 
 <script>
 
-  import Swiper from 'swiper'
-  export default {
-    name: "ImageList",
-      props:['skuImageList']
-  }
+    import Swiper from 'swiper'
+
+    export default {
+        name: "ImageList",
+        props: ['skuImageList'],
+        data() {
+            return {
+                currentIndex: 0
+            }
+        },
+        watch: {
+            skuImageList(newValue, oldValue) {
+
+                this.$nextTick(() => {
+                        var mySwiper = new Swiper(
+                            this.$refs.mySwiper, {
+
+                                slidesPerView: 3,
+                                slidesPerGroup: 1,
+                                //如果需要前进后退按钮
+                                navigation: {
+                                    nextEl: ".swiper-button-next",
+                                    prevEl: ".swiper-button-prev",
+                                }
+                            }
+                        )
+                    }
+                )
+            }
+        },
+        methods: {
+            changeCurrentIndex(index) {
+                this.currentIndex = index
+                this.$bus.$emit('getIndex',index)
+            }
+        }
+    }
 </script>
 
 <style lang="less" scoped>
@@ -44,10 +79,10 @@
           padding: 1px;
         }
 
-        &:hover {
-          border: 2px solid #f60;
-          padding: 1px;
-        }
+        //&:hover {
+        //  border: 2px solid #f60;
+        //  padding: 1px;
+        //}
       }
     }
 
@@ -70,6 +105,7 @@
       border: 1px solid rgb(204, 204, 204);
       top: 0;
       margin-top: 0;
+
       &::after {
         font-size: 12px;
       }
