@@ -3,8 +3,22 @@ import Home from "@/views/Home";
 import Login from "@/views/Login";
 import Register from "@/views/Register";
 import Search from "@/views/Search";
+import AddCartSuccess from "@/views/AddCartSuccess";
+import ShopCart from "@/views/ShopCart";
 
 export default [
+
+    {
+        path: "/shopcart",
+        component: ShopCart,
+        meta: {show: true}
+    },
+    {
+        path: "/addcartsuccess",
+        name: "addcartsuccess",
+        component: AddCartSuccess,
+        meta: {show: true}
+    },
     {
         path: "/detail/:skuid",
         component: Detail,

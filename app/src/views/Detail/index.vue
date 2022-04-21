@@ -80,12 +80,12 @@
                         </div>
                         <div class="cartWrap">
                             <div class="controls">
-                                <input autocomplete="off" class="itxt">
-                                <a href="javascript:" class="plus">+</a>
-                                <a href="javascript:" class="mins">-</a>
+                                <input autocomplete="off" class="itxt" v-model="skuNum" @change="changeSkuNum">
+                                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                                <a href="javascript:" class="mins" @click="skuNum>1?skuNum--:1">-</a>
                             </div>
                             <div class="add">
-                                <a href="javascript:">加入购物车</a>
+                                <a @click="addShopCart">加入购物车</a>
                             </div>
                         </div>
                     </div>
@@ -342,7 +342,10 @@
 
     export default {
         name: 'Detail',
-
+        data() {
+            //购买产品个数
+            return {skuNum: 1}
+        },
         components: {
             ImageList,
             Zoom
@@ -364,6 +367,31 @@
                     item.isChecked = 0
                 })
                 spuSaleAttrValue.isChecked = 1
+            },
+            changeSkuNum(event) {
+                const value = event.target.value * 1
+                if (isNaN(value) || value < 1) {
+                    this.skuNum = 1;
+                } else {
+                    this.skuNum = parseInt(value)
+                }
+
+            },
+            //加入购物车
+            async addShopCart() {
+                try {
+                    await this.$store.dispatch('addOrUpdateShopCart', {
+                        skuid: this.$route.params.skuid,
+                        skuNum: this.skuNum
+                    })
+                    //路由跳转
+                    sessionStorage.setItem("SKUINFO", JSON.stringify(this.skuInfo))
+                    this.$router.push({name: "addcartsuccess", query: {skuNum: this.skuNum}})
+                } catch (error) {
+                    alert(error.message())
+                }
+
+
             }
         }
     }

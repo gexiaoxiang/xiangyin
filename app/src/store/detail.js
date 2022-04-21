@@ -1,9 +1,11 @@
 //detail模块的小仓库
-import {reqGetGoodsInfo} from '@/api'
-
+import {reqGetGoodsInfo, reqAddOrUpdateShopCart} from '@/api'
+import {getUUID} from '@/utils/uuid_token'
 //仓库存储数据的地方
 const state = {
-    goodInfo: {}
+    goodInfo: {},
+    //游客临时身份
+    uuid_token:getUUID()
 
 };
 //修改state的唯一手段
@@ -14,12 +16,20 @@ const mutations = {
 };
 //处理action，可以书写自己业务逻辑
 const actions = {
-    //
+    //获取产品信息的action
     async getGoodInfo({commit}, skuid) {
         const result = await reqGetGoodsInfo(skuid);
         if (200 === result.code) {
             commit("GETGOODINFO", result.data)
         }
+    },
+    //将产品添加到购物车
+    async addOrUpdateShopCart({commit}, {skuid, skuNum}) {
+        const result = await reqAddOrUpdateShopCart(skuid, skuNum);
+        if (200 === result.code) {
+            return "ok"
+        }
+        return Promise.reject(new Error('faile'))
     },
 
 

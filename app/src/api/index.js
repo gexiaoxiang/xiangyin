@@ -7,7 +7,6 @@ export const reqCategoryList = () => requests({url: '/product/getBaseCategoryLis
 export const reqGetBannerList = () => mockRequests.get('banner')
 //获取floor数据
 export const reqGetFloorList = () => mockRequests.get('floor')
-
 //获取搜索模块数据地址 /api/list
 /**
  {
@@ -24,3 +23,8 @@ export const reqGetFloorList = () => mockRequests.get('floor')
 export const reqGetSearchInfo = (params) => requests({url: '/list', method: 'post', data: params})
 //获取产品详情
 export const reqGetGoodsInfo = (skuid) => requests({url: `/item/${skuid}`, method: 'get'})
+//将产品添加到购物车中 /api/cart/addToCart/{ skuId }/{ skuNum }
+export const reqAddOrUpdateShopCart = (skuid,skuNum) => requests({url: `/cart/addToCart/${skuid}/${skuNum}`, method: 'post'})
+//获取购物车列表 api/cart/cartList
+export const reqCartList = () => requests({url: `/cart/cartList`, method: 'get'})
+
