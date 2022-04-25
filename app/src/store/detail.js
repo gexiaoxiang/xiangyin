@@ -26,6 +26,7 @@ const actions = {
     //将产品添加到购物车
     async addOrUpdateShopCart({commit}, {skuid, skuNum}) {
         const result = await reqAddOrUpdateShopCart(skuid, skuNum);
+
         if (200 === result.code) {
             return "ok"
         }

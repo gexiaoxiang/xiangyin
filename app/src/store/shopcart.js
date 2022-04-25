@@ -16,7 +16,10 @@ const mutations = {
 const actions = {
     async getCartList({commit}) {
         const result = await reqCartList();
+
         if (200 === result.code) {
+            console.log(55);
+            console.log(result);
             commit("GETCARTLIST", result.data)
         }
     },
@@ -24,7 +27,12 @@ const actions = {
 
 };
 //理解为计算属性
-const getters = {};
+const getters = {
+    cartList(state){
+
+        return state.cartList[0]||{}
+    }
+};
 
 export default {
     state,
