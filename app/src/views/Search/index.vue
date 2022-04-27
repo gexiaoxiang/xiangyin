@@ -150,6 +150,7 @@
         },
         methods: {
             getData() {
+
                 this.$store.dispatch('getSearchList', this.searchParams)
             },
             //删除分类

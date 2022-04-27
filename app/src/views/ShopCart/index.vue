@@ -24,9 +24,10 @@
                         <span class="price">{{ cart.cartPrice }}</span>
                     </li>
                     <li class="cart-list-con5">
-                        <a href="javascript:void(0)" class="mins">-</a>
-                        <input autocomplete="off" type="text" minnum="1" class="itxt" :value="cart.skuNum">
-                        <a href="javascript:void(0)" class="plus">+</a>
+                        <a href="javascript:void(0)" class="mins" @click="handle('minus',-1,cart)">-</a>
+                        <input autocomplete="off" type="text" minnum="1" class="text" :value="cart.skuNum"
+                               @change="handle('change',$event.target.value*1,cart)">
+                        <a href="javascript:void(0)" class="plus" @click="handle('add',1,cart)">+</a>
                     </li>
                     <li class="cart-list-con6">
                         <span class="sum">{{ cart.cartPrice * cart.skuNum }}</span>
@@ -85,8 +86,37 @@
                 return sum
             },
             isAllChecked() {
-
                 return this.cartInfoList.every(item => item.isChecked == 1)
+            }
+        },
+        methods: {
+            getData() {
+                this.$store.dispatch('getCartList')
+            },
+            async handle(type, disNum, cart) {
+
+                switch (type) {
+                    case "add":
+                        disNum = 1;
+                        break;
+                    case "minus":
+                        disNum = cart.skuNum > 1 ? -1 : 0
+                        break;
+                    case"change":
+                        if (isNaN(disNum) || disNum < 1) {
+                            disNum = 0
+                        } else {
+                            disNum = parseInt(disNum) - cart.skuNum
+                        }
+                        break;
+                }
+                try {
+
+                    await this.$store.dispatch('addOrUpdateShopCart', {skuid: cart.skuId, skuNum: disNum})
+                    this.getData()
+                } catch (error) {
+
+                }
             }
         },
         mounted() {

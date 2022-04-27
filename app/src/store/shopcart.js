@@ -18,8 +18,6 @@ const actions = {
         const result = await reqCartList();
 
         if (200 === result.code) {
-            console.log(55);
-            console.log(result);
             commit("GETCARTLIST", result.data)
         }
     },
