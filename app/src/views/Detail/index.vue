@@ -353,7 +353,7 @@
         mounted() {
             //派发action获取产品详情
 
-            this.$store.dispatch('getGoodInfo', this.$route.params.skuid)
+            this.$store.dispatch('getGoodInfo', this.$route.params.skuId)
         },
         computed: {
             ...mapGetters(['categoryView', 'skuInfo', 'spuSaleAttrList']),
@@ -381,7 +381,7 @@
             async addShopCart() {
                 try {
                     await this.$store.dispatch('addOrUpdateShopCart', {
-                        skuid: this.$route.params.skuid,
+                        skuId: this.$route.params.skuId,
                         skuNum: this.skuNum
                     })
                     //路由跳转

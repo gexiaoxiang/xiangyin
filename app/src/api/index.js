@@ -22,9 +22,10 @@ export const reqGetFloorList = () => mockRequests.get('floor')
  */
 export const reqGetSearchInfo = (params) => requests({url: '/list', method: 'post', data: params})
 //获取产品详情
-export const reqGetGoodsInfo = (skuid) => requests({url: `/item/${skuid}`, method: 'get'})
+export const reqGetGoodsInfo = (skuId) => requests({url: `/item/${skuId}`, method: 'get'})
 //将产品添加到购物车中 /api/cart/addToCart/{ skuId }/{ skuNum }
-export const reqAddOrUpdateShopCart = (skuid,skuNum) => requests({url: `/cart/addToCart/${skuid}/${skuNum}`, method: 'post'})
+export const reqAddOrUpdateShopCart = (skuId,skuNum) => requests({url: `/cart/addToCart/${skuId}/${skuNum}`, method: 'post'})
 //获取购物车列表 api/cart/cartList
 export const reqCartList = () => requests({url: `/cart/cartList`, method: 'get'})
-
+//删除购物车产品的接口
+export const reqDeleteCartById = (skuId) => requests({url: `/cart/deleteCart/${skuId}`, method: 'delete'})

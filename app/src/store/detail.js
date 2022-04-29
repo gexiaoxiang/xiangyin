@@ -17,15 +17,15 @@ const mutations = {
 //处理action，可以书写自己业务逻辑
 const actions = {
     //获取产品信息的action
-    async getGoodInfo({commit}, skuid) {
-        const result = await reqGetGoodsInfo(skuid);
+    async getGoodInfo({commit}, skuId) {
+        const result = await reqGetGoodsInfo(skuId);
         if (200 === result.code) {
             commit("GETGOODINFO", result.data)
         }
     },
     //将产品添加到购物车
-    async addOrUpdateShopCart({commit}, {skuid, skuNum}) {
-        const result = await reqAddOrUpdateShopCart(skuid, skuNum);
+    async addOrUpdateShopCart({commit}, {skuId, skuNum}) {
+        const result = await reqAddOrUpdateShopCart(skuId, skuNum);
 
         if (200 === result.code) {
             return "ok"

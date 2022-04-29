@@ -33,7 +33,7 @@
                         <span class="sum">{{ cart.cartPrice * cart.skuNum }}</span>
                     </li>
                     <li class="cart-list-con7">
-                        <a href="#none" class="sindelet">删除</a>
+                        <a class="sindelet" @click="deleteCartById(cart)">删除</a>
                         <br>
                         <a href="#none">移到收藏</a>
                     </li>
@@ -112,15 +112,25 @@
                 }
                 try {
 
-                    await this.$store.dispatch('addOrUpdateShopCart', {skuid: cart.skuId, skuNum: disNum})
+                    await this.$store.dispatch('addOrUpdateShopCart', {skuId: cart.skuId, skuNum: disNum})
                     this.getData()
                 } catch (error) {
+
+                }
+            },
+            //
+            async deleteCartById(cart) {
+                try {
+
+                    await this.$store.dispatch('deleteCartById', cart.skuId)
+                    this.getData()
+                } catch (e) {
 
                 }
             }
         },
         mounted() {
-            this.$store.dispatch('getCartList', this.$route.params.skuid)
+            this.$store.dispatch('getCartList', this.$route.params.skuId)
         }
 
     }
