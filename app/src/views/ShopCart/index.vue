@@ -70,7 +70,7 @@
 
 <script>
     import {mapGetters} from 'vuex'
-
+    import throttle from 'lodash/throttle'
     export default {
         name: 'ShopCart',
         computed: {
@@ -93,8 +93,8 @@
             getData() {
                 this.$store.dispatch('getCartList')
             },
-            async handle(type, disNum, cart) {
-
+            //节流
+            handle: throttle(async function (type, disNum, cart) {
                 switch (type) {
                     case "add":
                         disNum = 1;
@@ -117,8 +117,9 @@
                 } catch (error) {
 
                 }
-            },
-            //
+
+            },500),
+            //删除产品
             async deleteCartById(cart) {
                 try {
 
