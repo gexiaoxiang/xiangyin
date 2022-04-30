@@ -13,7 +13,8 @@
             <div class="cart-body">
                 <ul class="cart-list" v-for="(cart,index) in cartInfoList" :key="cart.id">
                     <li class="cart-list-con1">
-                        <input type="checkbox" name="chk_list" :checked="cart.isChecked">
+                        <input type="checkbox" name="chk_list" :checked="cart.isChecked"
+                               @change="updateChecked(cart,$event)">
                     </li>
                     <li class="cart-list-con2">
                         <img :src="cart.imgUrl">
@@ -44,11 +45,12 @@
         </div>
         <div class="cart-tool">
             <div class="select-all">
-                <input class="chooseAll" type="checkbox" :checked="isAllChecked">
+                <input class="chooseAll" type="checkbox"
+                       :checked="isAllChecked&&cartInfoList.length>0" @change="updateAllChecked">
                 <span>全选</span>
             </div>
             <div class="option">
-                <a href="#none">删除选中的商品</a>
+                <a @click="deleteAllCheckedCart">删除选中的商品</a>
                 <a href="#none">移到我的关注</a>
                 <a href="#none">清除下柜商品</a>
             </div>
@@ -71,6 +73,7 @@
 <script>
     import {mapGetters} from 'vuex'
     import throttle from 'lodash/throttle'
+
     export default {
         name: 'ShopCart',
         computed: {
@@ -118,7 +121,7 @@
 
                 }
 
-            },500),
+            }, 500),
             //删除产品
             async deleteCartById(cart) {
                 try {
@@ -128,10 +131,29 @@
                 } catch (e) {
 
                 }
+            },
+            async updateChecked(cart, event) {
+                await this.$store.dispatch('updateCheckedById', {
+                    skuId: cart.skuId,
+                    isChecked: event.target.checked ? 1 : 0
+                })
+                this.getData()
+            },
+            //删除选中的产品
+            async deleteAllCheckedCart() {
+                await this.$store.dispatch('deleteAllCheckedCart')
+                this.getData()
+            },
+            //修改全部选中的产品
+            async updateAllChecked(event) {
+                let checked = event.target.checked ? "1" : "0";
+                await this.$store.dispatch('updateAllChecked', checked)
+                this.getData()
             }
         },
         mounted() {
             this.$store.dispatch('getCartList', this.$route.params.skuId)
+
         }
 
     }
