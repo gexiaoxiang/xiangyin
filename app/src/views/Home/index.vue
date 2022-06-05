@@ -33,6 +33,9 @@
         },
         mounted() {
             this.$store.dispatch("getFloorList");
+            //获取用户信息
+            this.$store.dispatch("userInfo");
+
         },
         computed:{
             ...mapState({

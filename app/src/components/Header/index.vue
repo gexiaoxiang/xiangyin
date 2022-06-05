@@ -6,16 +6,20 @@
             <div class="container">
                 <div class="loginList">
                     <p>尚品汇欢迎您！</p>
-                    <p>
+                    <p v-if="!userName">
                         <span>请</span>
                         <!-- 声明式导航:务必要有to属性-->
                         <router-link to="/login">登录</router-link>
                         <router-link class="register" to="/register">免费注册</router-link>
                     </p>
+                    <p v-else>
+                        <a>{{ userName }}</a>
+                        <a class="register" @click="logout">退出登录</a>
+                    </p>
                 </div>
                 <div class="typeList">
-                    <a href="###">我的订单</a>
-                    <a href="###">我的购物车</a>
+                    <router-link  to="/center">我的订单</router-link>
+                    <router-link  to="/shopcart">我的购物车</router-link>
                     <a href="###">我的尚品汇</a>
                     <a href="###">尚品汇会员</a>
                     <a href="###">企业采购</a>
@@ -84,12 +88,23 @@
                 this.$router.push(location)
 
 
+            },
+            logout() {
+                this.$store.dispatch('userLogout')
+                this.$router.push('/home')
+
             }
         },
         mounted() {
-            this.$bus.$on('clear',()=>{
-                this.keyword=''
+            this.$bus.$on('clear', () => {
+                this.keyword = ''
             })
+        },
+        computed: {
+            userName() {
+
+                return this.$store.state.user.userInfo.name
+            }
         }
     }
 </script>
