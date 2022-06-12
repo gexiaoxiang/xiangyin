@@ -32,11 +32,11 @@
     </el-pagination>
     <!--对话框-->
     <el-dialog :title="tmTiTle" :visible.sync="dialogFormVisible">
-      <el-form style="width: 80%" :model="tmForm">
-        <el-form-item label="品牌名称" label-width="100px">
+      <el-form style="width: 80%" :model="tmForm" :rules="rules" ref="ruleForm">
+        <el-form-item label="品牌名称" label-width="100px" prop="tmName">
           <el-input autocomplete="off" v-model="tmForm.tmName"></el-input>
         </el-form-item>
-        <el-form-item label="品牌LOGO" label-width="100px">
+        <el-form-item label="品牌LOGO" label-width="100px" prop="logoUrl">
           <!--文件上传-->
           <el-upload
             class="avatar-uploader"
@@ -76,8 +76,16 @@
           tmName: '',
           logoUrl: ''
         },
-        tmTiTle: ''
-
+        tmTiTle: '',
+        rules: {
+          tmName: [
+            {required: true, message: '请输入品牌名称', trigger: 'blur'},
+            {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'change'}
+          ],
+          logoUrl: [
+            {required: true, message: '请选择图片'}
+          ],
+        }
       }
     },
     mounted() {
@@ -127,24 +135,31 @@
         }
         return isJPG && isLt2M;
       },
-      async addOrUpdateTradeMark() {
-        this.dialogFormVisible = false
+      addOrUpdateTradeMark() {
+        this.$refs.ruleForm.validate(async (success) => {
+            if (success) {
+              this.dialogFormVisible = false
 
-        const result = await this.$API.trademark.reqAddOrUpdateTradeMark(this.tmForm)
-        if (result.code == 200) {
-          this.$message({
-            message: this.tmForm.id ? '修改品牌成功' : '添加品牌成功',
-            type: 'success'
-          })
+              const result = await this.$API.trademark.reqAddOrUpdateTradeMark(this.tmForm)
+              if (result.code == 200) {
+                this.$message({
+                  message: this.tmForm.id ? '修改品牌成功' : '添加品牌成功',
+                  type: 'success'
+                })
 
-        } else {
-          this.$message.error(this.tmForm.id ? '修改品牌失败' : '添加品牌失败')
-        }
-        this.getPageList(this.tmForm.id ? this.page : 1)
-        this.tmForm = {
-          tmName: '',
-          logoUrl: ''
-        }
+              } else {
+                this.$message.error(this.tmForm.id ? '修改品牌失败' : '添加品牌失败')
+              }
+              this.getPageList(this.tmForm.id ? this.page : 1)
+              this.tmForm = {
+                tmName: '',
+                logoUrl: ''
+              }
+            } else {
+              return false;
+            }
+          }
+        )
       }
 
     }
