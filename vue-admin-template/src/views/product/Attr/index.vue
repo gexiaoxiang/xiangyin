@@ -1,5 +1,12 @@
 <template>
-<div>属性管理</div>
+<div>
+  <el-card style="margin: 20px 0px">
+    <CateGorySelect></CateGorySelect>
+  </el-card>
+
+  <el-card></el-card>
+
+</div>
 </template>
 
 <script>
