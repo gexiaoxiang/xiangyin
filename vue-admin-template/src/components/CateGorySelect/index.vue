@@ -16,7 +16,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="三级分类">
-        <el-select placeholder="请选择" v-model="cForm.category3Id">
+        <el-select placeholder="请选择" v-model="cForm.category3Id" @change="handler()">
           <el-option :label="category3.name" :value="category3.id" v-for="category3 in category3List"
                      :key="category3.id"></el-option>
         </el-select>
@@ -46,12 +46,20 @@
     },
     methods: {
       async getCategory1List() {
+        this.category2List = [];
+        this.category3List = [];
+        this.cForm.category2Id = '';
+        this.cForm.category3Id = '';
+
         const result = await this.$API.attr.reqCategory1List();
         if (result.code == 200) {
           this.category1List = result.data
+
         }
       },
       async getCategory2List(category1Id) {
+        this.category3List = [];
+        this.cForm.category3Id = '';
         const result = await this.$API.attr.reqCategory2List(category1Id);
         if (result.code == 200) {
           this.category2List = result.data
@@ -62,6 +70,9 @@
         if (result.code == 200) {
           this.category3List = result.data
         }
+      },
+      handler() {
+        this.$emit('getCategoryId', this.cForm)
       }
     }
   }
