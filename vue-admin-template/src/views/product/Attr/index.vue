@@ -11,7 +11,10 @@
 
 <script>
   export default {
-    name: "attr"
+    name: "attr",
+    methods:{
+
+    },
   }
 </script>
 

@@ -38,18 +38,26 @@ module.exports = {
     },
     proxy: {
 
-      '/dev-api/admin/acl': {
-        target: 'http://39.98.123.211:8170',
-        pathRewrite: {
-          '^/dev-api/admin/acl': '/admin/acl'
-        }
-      },
+      // '/dev-api/admin/acl': {
+      //   target: 'http://39.98.123.211:8170',
+      //   pathRewrite: {
+      //     '^/dev-api/admin/acl': '/admin/acl'
+      //   }
+      // },
+      // '/dev-api': {
+      //   target: 'http://39.98.123.211:8416',
+      //   pathRewrite: {
+      //     '^/dev-api': '',
+      //   }
+      // },
       '/dev-api': {
-        target: 'http://39.98.123.211:8416',
+        target: 'http://gmall-h5-api.atguigu.cn',
         pathRewrite: {
           '^/dev-api': '',
         }
       },
+
+
     }
 
   },
