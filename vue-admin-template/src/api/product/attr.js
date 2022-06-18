@@ -15,10 +15,16 @@ export const reqCategory3List = (category2Id) => request({
   method: 'get'
 });
 
+
 // 商品基础属性接口
-export const reqAttrInfoList = (category1Id,category2Id,category3Id) => request({
+export const reqAttrInfoList = (category1Id, category2Id, category3Id) => request({
   url: `/admin/product/attrInfoList/${category1Id}/${category2Id}/${category3Id}`,
   method: 'get'
 });
 
-
+// 保存商品基础属性接口
+export const reqAddAttr = (data) => request({
+  url: `/admin/product/saveAttrInfo`,
+  data,
+  method: 'post'
+});

@@ -46,11 +46,6 @@
     },
     methods: {
       async getCategory1List() {
-        this.category2List = [];
-        this.category3List = [];
-        this.cForm.category2Id = '';
-        this.cForm.category3Id = '';
-
         const result = await this.$API.attr.reqCategory1List();
         if (result.code == 200) {
           this.category1List = result.data
@@ -58,20 +53,27 @@
         }
       },
       async getCategory2List(category1Id) {
+        this.category2List = [];
         this.category3List = [];
+        this.cForm.category2Id = '';
         this.cForm.category3Id = '';
+
         const result = await this.$API.attr.reqCategory2List(category1Id);
         if (result.code == 200) {
           this.category2List = result.data
         }
       },
       async getCategory3List(category2Id) {
+        this.category3List = [];
+        this.cForm.category3Id = '';
+
         const result = await this.$API.attr.reqCategory2List(category2Id);
         if (result.code == 200) {
           this.category3List = result.data
         }
       },
       handler() {
+        const cForm = {...this.cForm}
         this.$emit('getCategoryId', this.cForm)
       }
     }
