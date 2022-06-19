@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-card style="margin: 20px 0px">
-      <CateGorySelect @getCategoryId="getCategoryId"></CateGorySelect>
+      <CateGorySelect @getCategoryId="getCategoryId" :isShow="!isShowTable"></CateGorySelect>
     </el-card>
 
     <el-card>
@@ -53,12 +53,18 @@
           </el-table-column>
           <el-table-column with="with" prop="prop" label="操作">
             <template slot-scope="{row,$index}">
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteAttr(row)"></el-button>
+              <el-popconfirm :title="`确定删除${row.valueName}吗？`" @onConfirm="deleteAttrValue($index)">
+                <el-button type="danger"
+                           icon="el-icon-delete"
+                           size="mini"
+                           slot="reference"></el-button>
+              </el-popconfirm>
+
             </template>
 
           </el-table-column>
         </el-table>
-        <el-button type="primary">保存</el-button>
+        <el-button type="primary" @click="addOrUpdateAttr">保存</el-button>
         <el-button @click="isShowTable=true">取消</el-button>
       </div>
 
@@ -75,7 +81,8 @@
     name: "attr",
     data() {
       return {
-        category3Id: '',
+        // category3Id: '',
+        cmForm: {},
         list: [],
         isShowTable: true,
         //收集新增属性|修改属性
@@ -91,7 +98,7 @@
     methods: {
       //自定义事件回调
       async getCategoryId(cForm) {
-        this.category3Id = cForm.category3Id;
+        this.cForm = cForm;
         const result = await this.$API.attr.reqAttrInfoList(cForm.category1Id, cForm.category2Id, cForm.category3Id)
         if (result.code == 200) {
           this.list = result.data
@@ -117,6 +124,10 @@
           this.$set(item, 'flag', false)
         })
       },
+      //删除属性
+      deleteAttr(row) {
+        this.list
+      },
       //添加属性值
       addAttrValue() {
         this.attrInfo.attrValueList.push({
@@ -129,11 +140,8 @@
         })
       },
       //删除属性值
-      deleteAttr(row) {
-
-        this.list = this.list.filter(item => item.id != row.id)
-        const result = this.$API.attr.reqAddAttr(this.list);
-
+      deleteAttrValue(index) {
+        this.attrInfo.attrValueList.splice(index, 1)
       },
       //失去焦点事件
       toLook(row) {
@@ -161,6 +169,21 @@
         this.$nextTick(() => {
           this.$refs[index].focus()
         })
+      },
+      //保存
+      async addOrUpdateAttr() {
+        this.attrInfo.attrValueList = this.attrInfo.attrValueList.filter(item => {
+          if (item.valueName != '') {
+            delete item.flag;
+            return true
+          }
+        })
+        const result = await this.$API.attr.reqAddorUpdateAttr(this.attrInfo);
+        if (result.code == 200) {
+          this.isShowTable = true
+          this.getCategoryId(this.cForm)
+        }
+
       }
     }
   }

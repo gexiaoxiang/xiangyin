@@ -23,7 +23,7 @@ export const reqAttrInfoList = (category1Id, category2Id, category3Id) => reques
 });
 
 // 保存商品基础属性接口
-export const reqAddAttr = (data) => request({
+export const reqAddorUpdateAttr = (data) => request({
   url: `/admin/product/saveAttrInfo`,
   data,
   method: 'post'

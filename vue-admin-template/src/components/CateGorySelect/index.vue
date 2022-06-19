@@ -3,20 +3,20 @@
     <el-form :inline="true" class="demo-form-inline" :model="cForm">
 
       <el-form-item label="一级分类">
-        <el-select placeholder="请选择" v-model="cForm.category1Id" @change="getCategory2List(cForm.category1Id)">
+        <el-select placeholder="请选择" v-model="cForm.category1Id" @change="getCategory2List(cForm.category1Id)" :disabled="isShow">
           <el-option :label="category1.name" :value="category1.id" v-for="category1   in category1List"
                      :key="category1.id"></el-option>
 
         </el-select>
       </el-form-item>
       <el-form-item label="二级分类">
-        <el-select placeholder="请选择" v-model="cForm.category2Id" @change="getCategory3List(cForm.category2Id)">
+        <el-select placeholder="请选择" v-model="cForm.category2Id" @change="getCategory3List(cForm.category2Id)" :disabled="isShow">
           <el-option :label="category2.name" :value="category2.id" v-for="category2  in category2List"
                      :key="category2.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="三级分类">
-        <el-select placeholder="请选择" v-model="cForm.category3Id" @change="handler()">
+        <el-select placeholder="请选择" v-model="cForm.category3Id" @change="handler()" :disabled="isShow">
           <el-option :label="category3.name" :value="category3.id" v-for="category3 in category3List"
                      :key="category3.id"></el-option>
         </el-select>
@@ -29,6 +29,7 @@
 <script>
   export default {
     name: "CateGorySelect",
+    props:['isShow'],
     mounted() {
       this.getCategory1List();
     },
