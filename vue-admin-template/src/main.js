@@ -15,6 +15,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 import CateGorySelect from '@/components/CateGorySelect'
+import HintButton from '@/components/HintButton'
 
 
 if (process.env.NODE_ENV === 'production') {
@@ -32,6 +33,7 @@ import API from '@/api';
 Vue.prototype.$API = API
 //注册全局组件
 Vue.component(CateGorySelect.name, CateGorySelect)
+Vue.component(HintButton.name, HintButton)
 new Vue({
   el: '#app',
   router,
