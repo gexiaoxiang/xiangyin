@@ -6,15 +6,16 @@
     <el-card>
       <!-- 列表 -->
       <div v-show="scene==0">
-        <el-button type="primary" icon="el-icon-plus">添加SPU</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="addSpu" :disabled="!cForm.category3Id">添加SPU</el-button>
         <el-table border style="width: 100%" :data="list">
           <el-table-column label="序号" type="index" width="80px" align="center"></el-table-column>
           <el-table-column prop="spuName" label="spu名称"></el-table-column>
           <el-table-column prop="description" label="spu描述"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="{row,$index}">
-              <HintButton title="添加sku" type="success" icon="el-icon-plus" size="mini"></HintButton>
-              <HintButton title="修改spu" type="waring" icon="el-icon-edit" size="mini"></HintButton>
+              <HintButton title="添加sku" type="success" icon="el-icon-plus" size="mini" @click="addSku"></HintButton>
+              <HintButton title="修改spu" type="warning" icon="el-icon-edit" size="mini"
+                          @click="updateSpu(row)"></HintButton>
               <HintButton title="查看当前spu的所有实例" type="info" icon="el-icon-info" size="mini"></HintButton>
               <HintButton title="删除spu" type="danger" icon="el-icon-delete" size="mini"></HintButton>
 
@@ -90,7 +91,19 @@
           this.total = result.data.total
           this.limit = result.data.size
         }
-      }
+      },
+      //添加SPU按钮
+      addSpu() {
+        this.scene = 1;
+      },
+      //添加SkU按钮
+      addSku() {
+        this.scene = 2;
+      },
+      //修改SPU按钮
+      updateSpu(row) {
+        this.scene = 1;
+      },
     }
   }
 </script>
