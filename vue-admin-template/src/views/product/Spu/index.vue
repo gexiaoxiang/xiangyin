@@ -35,7 +35,7 @@
       </div>
       <!-- 添加|修改SPU -->
 
-      <SpuForm v-show="scene==1"></SpuForm>
+      <SpuForm v-show="scene==1" @changeScene="changeScene" ref="spu"></SpuForm>
 
       <!-- 添加SKU -->
       <SkuForm v-show="scene==2"></SkuForm>
@@ -69,6 +69,7 @@
     methods: {
       //三级联动自定义事件
       getCategoryId(cForm) {
+        this.scene = 0;
         this.cForm = cForm
         this.getSpuList();
 
@@ -103,7 +104,13 @@
       //修改SPU按钮
       updateSpu(row) {
         this.scene = 1;
+        //获取子组件spuForm
+        this.$refs.spu.initSpuData(row)
       },
+      //spuForm自定义事件回调
+      changeScene(scene) {
+        this.scene = scene;
+      }
     }
   }
 </script>

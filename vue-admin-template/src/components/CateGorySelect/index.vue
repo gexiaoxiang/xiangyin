@@ -49,7 +49,7 @@
       async getCategory1List() {
         const result = await this.$API.attr.reqCategory1List();
         if (result.code == 200) {
-          this.category1List = result.data
+          this.category1List = result.data.slice(0,25)
 
         }
       },
@@ -61,7 +61,7 @@
 
         const result = await this.$API.attr.reqCategory2List(category1Id);
         if (result.code == 200) {
-          this.category2List = result.data
+          this.category2List = result.data.slice(0,25)
         }
       },
       async getCategory3List(category2Id) {
@@ -70,7 +70,8 @@
 
         const result = await this.$API.attr.reqCategory2List(category2Id);
         if (result.code == 200) {
-          this.category3List = result.data
+          this.category3List = result.data.slice(0,25)
+
         }
       },
       handler() {
