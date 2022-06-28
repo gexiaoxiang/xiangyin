@@ -47,24 +47,22 @@
           <el-table-column prop="saleAttrName" label="属性名"></el-table-column>
           <el-table-column prop="" label="属性值名称列表">
             <template slot-scope="{row,$index}">
-              <el-tag :key="spuSaleAttrValue.id" v-for="spuSaleAttrValue in row.spuSaleAttrValueList" closable
-                      :disable-transitions="false"
-              >
+              <el-tag :key="spuSaleAttrValue.id" v-for="(spuSaleAttrValue,index) in row.spuSaleAttrValueList" closable
+                      :disable-transitions="false" @close=" row.spuSaleAttrValueList.splice(index,1)">
                 {{ spuSaleAttrValue.saleAttrValueName }}
               </el-tag>
               <el-input class="input-new-tag" v-if="row.inputVisible" v-model="row.inputValue" ref="saveTagInput"
                         size="small"
-                        @keyup.enter.native="handleInputConfirm"
-                        @blur="handleInputConfirm"
-              >
+                        @keyup.enter.native="handleInputConfirm(row)"
+                        @blur="handleInputConfirm(row)">
               </el-input>
-              <el-button v-else class="button-new-tag" size="small" @click="showInput">添加</el-button>
+              <el-button v-else class="button-new-tag" size="small" @click="showInput(row)">添加</el-button>
             </template>
 
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="{row,$index}">
-              <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="spu.spuSaleAttrList.splice($index,1)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -164,13 +162,36 @@
         }
       },
 
-      showInput() {
+      showInput(row) {
+        this.$set(row, 'inputVisible', true)
+        this.$set(row, 'inputValue', '')
+      },
+
+      //属性值input blur事件
+      handleInputConfirm(row) {
+
+        const {baseSaleAttrId, inputValue} = row
+        if (inputValue.trim() == '') {
+          this.$message('属性不能为空')
+          return
+        }
+        const result = row.spuSaleAttrValueList.every(item => item.saleAttrValueName != inputValue);
+        if (!result) {
+          this.$message('属性不能重复')
+          return
+        }
+
+        let newSaleAttrValue = {baseSaleAttrId, saleAttrValueName: inputValue}
+        row.spuSaleAttrValueList.push(newSaleAttrValue)
+        row.inputVisible = false
+
 
       },
       addSaleAttr() {
         const [basSaleAttrId, saleAttrName] = this.attrIdAndAttrName.split(":");
-        let newSaleAttr = {basSaleAttrId, saleAttrName, spuSaleAttrList: []}
+        let newSaleAttr = {basSaleAttrId, saleAttrName, spuSaleAttrValueList: []}
         this.spu.spuSaleAttrList.push(newSaleAttr)
+        this.attrIdAndAttrName = ''
 
       }
     },

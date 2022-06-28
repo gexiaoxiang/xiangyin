@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-card>
-      <CateGorySelect @getCategoryId="getCategoryId" :isShow="!show"></CateGorySelect>
+      <CateGorySelect @getCategoryId="getCategoryId" :isShow="scene!=0"></CateGorySelect>
     </el-card>
     <el-card>
       <!-- 列表 -->
@@ -60,8 +60,7 @@
         total: 0,
         cForm: {},
         list: [],
-        //控制三级联动的可操作性
-        show: true,
+
         //0 展示SPU列表  1 添加|修改SPU 2 添加 SKU
         scene: 0,
       }
