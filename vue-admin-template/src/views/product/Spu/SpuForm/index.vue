@@ -62,13 +62,14 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="{row,$index}">
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="spu.spuSaleAttrList.splice($index,1)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" size="mini"
+                         @click="spu.spuSaleAttrList.splice($index,1)"></el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">保存</el-button>
+        <el-button type="primary" @click="saveOrUpdateSpu">保存</el-button>
         <el-button @click="$emit('changeScene',0)">取消</el-button>
       </el-form-item>
 
@@ -193,6 +194,19 @@
         this.spu.spuSaleAttrList.push(newSaleAttr)
         this.attrIdAndAttrName = ''
 
+      },
+      async saveOrUpdateSpu() {
+        this.spu.spuImageList = this.spuImageList.map(item => {
+          return {
+            imageName: item.name,
+            imageUrl: (item.response && item.response.data) || item.url
+          }
+        })
+        const result = await this.$API.spu.reqSaveOrUpdateSpu(this.spu);
+        if (result.code == 200) {
+          this.$message({type: 'success', message: "成功"})
+          this.$emit('changeScene',0)
+        }
       }
     },
     computed: {

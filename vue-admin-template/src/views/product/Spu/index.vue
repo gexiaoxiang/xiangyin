@@ -84,7 +84,10 @@
         this.getSpuList();
       },
       //获取SPU列表
-      async getSpuList() {
+      async getSpuList(page) {
+        if (page) {
+          this.page = page
+        }
         const result = await this.$API.spu.reqSpuInfoList(this.page, this.limit, this.cForm.category3Id);
         if (result.code == 200) {
           this.list = result.data.records
@@ -109,6 +112,7 @@
       //spuForm自定义事件回调
       changeScene(scene) {
         this.scene = scene;
+        this.getSpuList(this.page);
       }
     }
   }
