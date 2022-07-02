@@ -63,14 +63,14 @@
           <el-table-column label="操作">
             <template slot-scope="{row,$index}">
               <el-button type="danger" icon="el-icon-delete" size="mini"
-                         @click="spu.spuSaleAttrList.splice($index,1)"></el-button>
+                         @click="removeSaleAttr($index)"></el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="saveOrUpdateSpu">保存</el-button>
-        <el-button @click="$emit('changeScene',0)">取消</el-button>
+        <el-button @click="cancel">取消</el-button>
       </el-form-item>
 
 
@@ -86,31 +86,12 @@
         dialogImageUrl: '',
         dialogVisible: false,
         spu: {
-          "category3Id": 0,
-          "tmId": 0,
-          "description": "string",
-          "spuNam": "",
-          spuImageList: [{
-            "id": 0,
-            "imgName": "",
-            "imgUrl": "",
-            "spuId": 0
-
-          }],
-          "spuSaleAttrList": [{
-            "baseSaleAttrId": 0,
-            "id": 0,
-            "saleAttrName": "",
-            "spuId": 0,
-            "spuSaleAttrValueList": [{
-              "baseSaleAttrId": 0,
-              "id": 0,
-              "isChecked": "",
-              "saleAttrName": "",
-              "saleAttrValueName": "",
-              "spuId": 0
-            }]
-          }]
+          category3Id: 0,
+          tmId: '',
+          description: "",
+          spuName: "",
+          spuImageList: [],
+          spuSaleAttrList: []
         },
         tradeMarkList: [],
         spuImageList: [],
@@ -133,20 +114,28 @@
 
       },
       //初始化spuForm数据
-      async initSpuData(spu) {
+      async initSpuData(spu, cForm) {
+        if (cForm) {
+          this.spu.category3Id = cForm.category3Id
+        }
+        if (spu.id) {
 
-        const spuResult = await this.$API.spu.reqSpu(spu.id);
-        if (spuResult.code == 200) {
-          this.spu = spuResult.data
+          const spuResult = await this.$API.spu.reqSpu(spu.id);
+          if (spuResult.code == 200) {
+            this.spu = spuResult.data
+          }
         }
         // const tradeMarkResult = await this.$API.trademark.reqTradeMarkList(1, 50);
+
         const tradeMarkResult = await this.$API.trademark.reqTradeMark();
         if (tradeMarkResult.code == 200) {
           this.tradeMarkList = tradeMarkResult.data
         }
-        const spuImageResult = await this.$API.spu.reqSpuImageList(spu.id);
-        if (spuImageResult.code == 200) {
+        if (spu.id) {
 
+          const spuImageResult = await this.$API.spu.reqSpuImageList(spu.id);
+          if (spuImageResult.code == 200) {
+          }
           const listArr = spuImageResult.data
           listArr.forEach(item => {
             item.name = item.imgName
@@ -182,36 +171,58 @@
           return
         }
 
-        let newSaleAttrValue = {baseSaleAttrId, saleAttrValueName: inputValue}
+        let newSaleAttrValue = {baseSaleAttrId, saleAttrValueName: inputValue, saleAttrName: row.saleAttrName}
         row.spuSaleAttrValueList.push(newSaleAttrValue)
         row.inputVisible = false
 
 
       },
       addSaleAttr() {
-        const [basSaleAttrId, saleAttrName] = this.attrIdAndAttrName.split(":");
-        let newSaleAttr = {basSaleAttrId, saleAttrName, spuSaleAttrValueList: []}
+        const [baseSaleAttrId, saleAttrName] = this.attrIdAndAttrName.split(":");
+        let newSaleAttr = {baseSaleAttrId, saleAttrName, spuSaleAttrValueList: []}
         this.spu.spuSaleAttrList.push(newSaleAttr)
         this.attrIdAndAttrName = ''
+
+      },
+      async removeSaleAttr(index) {
+        this.spu.spuSaleAttrList.splice(index, 1)
+
+        const baseSaleAttrResult = await this.$API.spu.reqBaseSaleAttrList();
+        if (baseSaleAttrResult.code == 200) {
+          this.baseSaleAttrList = baseSaleAttrResult.data
+
+        }
+
 
       },
       async saveOrUpdateSpu() {
         this.spu.spuImageList = this.spuImageList.map(item => {
           return {
-            imageName: item.name,
-            imageUrl: (item.response && item.response.data) || item.url
+            imgName: item.name,
+            imgUrl: (item.response && item.response.data) || item.url
           }
         })
         const result = await this.$API.spu.reqSaveOrUpdateSpu(this.spu);
         if (result.code == 200) {
           this.$message({type: 'success', message: "成功"})
-          this.$emit('changeScene',0)
+          this.$emit('changeScene', {scene: 0, flag: this.spu.id ? '修改' : '添加'})
+          Object.assign(this._data,this.$options.data())
         }
+      },
+      cancel() {
+        this.spu={}
+        this.$emit('changeScene', {scene: 0, flag: this.spu.id ? '修改' : '添加'})
+
+        Object.assign(this._data,this.$options.data())
       }
     },
     computed: {
       //计算出还未选择的销售属性
       unSelectSaleAttr() {
+
+        if (!this.spu.spuSaleAttrList) {
+          return this.baseSaleAttrList
+        }
         this.baseSaleAttrList = this.baseSaleAttrList.filter(item => {
           return this.spu.spuSaleAttrList.every(e => {
             return item.name != e.saleAttrName

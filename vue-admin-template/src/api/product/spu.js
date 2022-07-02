@@ -20,16 +20,21 @@ export const reqBaseSaleAttrList = () => request({
   url: `/admin/product/baseSaleAttrList`,
   methods: 'get'
 })
-//修改||添加SPI
+//修改||添加SPU
 export const reqSaveOrUpdateSpu = (spuInfo) => {
 
   if (spuInfo.id) {
     return request({url: '/admin/product/updateSpuInfo', method: 'post', data: spuInfo})
   } else {
-    return request({url: '/admin/product/saveSpuInfo', method: 'get', data: spuInfo})
+    return request({url: '/admin/product/saveSpuInfo', method: 'post', data: spuInfo})
 
   }
 
 }
+//删除SPU
+export const reqDeleteSpu = (spuId) => request({
+  url: `/admin/product/deleteSpu/${spuId}`,
+  method: 'delete'
+})
 
 
