@@ -13,7 +13,7 @@
           <el-table-column prop="description" label="spu描述"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="{row,$index}">
-              <HintButton title="添加sku" type="success" icon="el-icon-plus" size="mini" @click="addSku"></HintButton>
+              <HintButton title="添加sku" type="success" icon="el-icon-plus" size="mini" @click="addSku(row)"></HintButton>
               <HintButton title="修改spu" type="warning" icon="el-icon-edit" size="mini"
                           @click="updateSpu(row)"></HintButton>
               <HintButton title="查看当前spu的所有实例" type="info" icon="el-icon-info" size="mini"></HintButton>
