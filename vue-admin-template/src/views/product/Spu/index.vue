@@ -13,7 +13,8 @@
           <el-table-column prop="description" label="spu描述"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="{row,$index}">
-              <HintButton title="添加sku" type="success" icon="el-icon-plus" size="mini" @click="addSku(row)"></HintButton>
+              <HintButton title="添加sku" type="success" icon="el-icon-plus" size="mini"
+                          @click="addSku(row)"></HintButton>
               <HintButton title="修改spu" type="warning" icon="el-icon-edit" size="mini"
                           @click="updateSpu(row)"></HintButton>
               <HintButton title="查看当前spu的所有实例" type="info" icon="el-icon-info" size="mini"></HintButton>
@@ -43,7 +44,7 @@
       <SpuForm v-show="scene==1" @changeScene="changeScene" ref="spu"></SpuForm>
 
       <!-- 添加SKU -->
-      <SkuForm v-show="scene==2"></SkuForm>
+      <SkuForm v-show="scene==2" @changeScene="changeScene" ref="sku"></SkuForm>
 
     </el-card>
   </div>
@@ -108,9 +109,10 @@
         this.$refs.spu.initSpuData({}, this.cForm)
       },
       //添加SkU按钮
-      addSku() {
-        this.scene = 2;
+      addSku(row) {
 
+        this.scene = 2;
+        this.$refs.sku.initSkuData(this.cForm,row);
       },
       //修改SPU按钮
       updateSpu(row) {
@@ -132,6 +134,7 @@
       },
       //spuForm自定义事件回调
       changeScene({scene, flag}) {
+        console.log('changeScene');
         this.scene = scene;
         if (flag == '修改') {
           this.getSpuList(this.page);

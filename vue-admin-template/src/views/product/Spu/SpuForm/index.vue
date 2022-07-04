@@ -135,14 +135,14 @@
 
           const spuImageResult = await this.$API.spu.reqSpuImageList(spu.id);
           if (spuImageResult.code == 200) {
-          }
-          const listArr = spuImageResult.data
-          listArr.forEach(item => {
-            item.name = item.imgName
-            item.url = item.imgUrl
-          })
-          this.spuImageList = listArr
 
+            const listArr = spuImageResult.data
+            listArr.forEach(item => {
+              item.name = item.imgName
+              item.url = item.imgUrl
+            })
+            this.spuImageList = listArr
+          }
         }
 
         const baseSaleAttrResult = await this.$API.spu.reqBaseSaleAttrList();
@@ -206,14 +206,13 @@
         if (result.code == 200) {
           this.$message({type: 'success', message: "成功"})
           this.$emit('changeScene', {scene: 0, flag: this.spu.id ? '修改' : '添加'})
-          Object.assign(this._data,this.$options.data())
+          Object.assign(this._data, this.$options.data())
         }
       },
       cancel() {
-        this.spu={}
         this.$emit('changeScene', {scene: 0, flag: this.spu.id ? '修改' : '添加'})
 
-        Object.assign(this._data,this.$options.data())
+        Object.assign(this._data, this.$options.data())
       }
     },
     computed: {
