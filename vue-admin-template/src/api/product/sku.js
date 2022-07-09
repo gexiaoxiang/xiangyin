@@ -7,7 +7,3 @@ export const reqSpuSaleAttrList = (spuId) => request({
 })
 
 
-export const reqSaveSkuInfo = (spuId) => request({
-    url: `/admin/product/spuSaleAttrList/${spuId}`,
-    method: 'put'
-})

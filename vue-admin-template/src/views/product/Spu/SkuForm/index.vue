@@ -8,10 +8,10 @@
         <el-input placeholder="SKU名称" v-model="skuInfo.skuName"></el-input>
       </el-form-item>
       <el-form-item label="价格(元)">
-        <el-input type="number" placeholder="价格(元)" v-model="skuInfo.price"></el-input>
+        <el-input    placeholder="价格(元)" v-model="skuInfo.price"></el-input>
       </el-form-item>
       <el-form-item label="重量(千克)">
-        <el-input placeholder="重量(千克)" v-model="skuInfo.weight"></el-input>
+        <el-input   placeholder="重量(千克)" v-model="skuInfo.weight"></el-input>
       </el-form-item>
       <el-form-item label="规格描述">
         <el-input type="textarea" placeholder="规格描述" rows="3" v-model="skuInfo.skuDesc"></el-input>
@@ -70,7 +70,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary"  >保存</el-button>
+        <el-button type="primary" @click="save">保存</el-button>
         <el-button @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -82,22 +82,23 @@
     name: "SkuForm",
     data() {
       return {
-        TEST: '',
         spuImageList: [],
         spuSaleAttrList: [],
         attrInfoList: [],
         skuInfo: {
-          categoryId: '',
+          category3Id: '',
           spuId: '',
           tmId: '',
 
           skuName: '',
-          price: '',
-          weight: '',
+          price: 0,
+          weight: 0,
           skuDesc: '',
           skuDefaultImg: '',
+
           skuImageList: [],
-          skuAttrValueList: []
+          skuAttrValueList: [],
+          skuSaleAttrValueList: []
 
         },
         spu: {},
@@ -107,14 +108,14 @@
     methods: {
       async initSkuData(cForm, spu) {
         this.skuInfo.category3Id = spu.category3Id;
-        this.skuInfo.spuId = spu.spuId;
+        this.skuInfo.spuId = spu.id;
         this.skuInfo.tmId = spu.tmId;
         this.spu = spu;
         //获取图片
         const spuImageResult = await this.$API.spu.reqSpuImageList(spu.id);
         if (spuImageResult.code == 200) {
 
-          const listArr = spuImageResult.data
+          let listArr = spuImageResult.data
           listArr.forEach(item => {
             // item.name = item.imgName
             // item.url = item.imgUrl
@@ -136,6 +137,42 @@
         }
       }
       ,
+      async save() {
+        this.skuInfo.skuAttrValueList = this.attrInfoList.reduce((prev, item) => {
+          if (item.attrIdAndValueId) {
+
+            const [attrId, valueId] = item.attrIdAndValueId.split(':');
+            prev.push({attrId, valueId})
+          }
+          return prev
+        }, [])
+        this.skuInfo.skuSaleAttrValueList = this.spuSaleAttrList.reduce((prev, item) => {
+          if (item.attrIdAndValueId) {
+
+            const [saleAttrId, saleAttrValueId] = item.attrIdAndValueId.split(':');
+            prev.push({saleAttrId, saleAttrValueId})
+          }
+          return prev
+        }, [])
+
+        this.skuInfo.skuImageList = this.imageList.map(item => {
+          return {
+            imgName: item.imgName,
+            imgUrl: item.imgUrl,
+            isDefault: item.isDefault,
+            spuImgId: item.id,
+          }
+        })
+        const response = await this.$API.spu.reqAddSku(this.skuInfo);
+        if (response.code == 200) {
+
+          this.$message({type: 'success', message: "添加SKU成功"})
+          this.$emit('changeScene', {scene: 0, flag: ''})
+          Object.assign(this._data, this.$options.data())
+
+        }
+
+      },
       cancel() {
 
         this.$emit('changeScene', {scene: 0, flag: ''})
@@ -151,7 +188,7 @@
           item.isDefault = 0
         })
         row.isDefault = 1
-        this.skuInfo.skuDefaultImg=row.imgUrl
+        this.skuInfo.skuDefaultImg = row.imgUrl
       }
     },
 

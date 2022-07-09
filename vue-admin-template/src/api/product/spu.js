@@ -38,3 +38,12 @@ export const reqDeleteSpu = (spuId) => request({
 })
 
 
+//添加SKU
+export const reqAddSku = (skuInfo) => request({
+  url: `/admin/product/saveSkuInfo/`,
+  data: skuInfo,
+  method: 'post'
+})
+
+
+
