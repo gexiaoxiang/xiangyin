@@ -17,7 +17,8 @@
                           @click="addSku(row)"></HintButton>
               <HintButton title="修改spu" type="warning" icon="el-icon-edit" size="mini"
                           @click="updateSpu(row)"></HintButton>
-              <HintButton title="查看当前spu的所有实例" type="info" icon="el-icon-info" size="mini"></HintButton>
+              <HintButton title="查看当前spu的所有实例" type="info" icon="el-icon-info" size="mini"
+                          @click="handler(row)"></HintButton>
               <el-popconfirm title="这是一段内容确定删除吗？" @onConfirm=" deleteSpu(row)">
 
 
@@ -46,6 +47,24 @@
       <!-- 添加SKU -->
       <SkuForm v-show="scene==2" @changeScene="changeScene" ref="sku"></SkuForm>
 
+      <!--SKU实例列表-->
+
+
+      <el-dialog :title="`${spu.spuName}的SKU列表`"
+                 :visible.sync="dialogTableVisible"
+                 before-close="close"
+      >
+        <el-table :data="skuList" border style="width: 100%" v-loading="loading">
+          <el-table-column prop="skuName" property="date" label="名称"></el-table-column>
+          <el-table-column prop="price" property="name" label="价格"></el-table-column>
+          <el-table-column prop="weight" property="address" label="重量"></el-table-column>
+          <el-table-column property="address" label="图片">
+            <template slot-scope="{row,$index}">
+              <img :src="row.skuDefaultImg" style="width: 100px;height: 100px">
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -61,6 +80,10 @@
     },
     data() {
       return {
+        loading:true,
+        dialogTableVisible: false,
+        spu: {},
+        skuList: [],
         limit: 3,
         page: 1,
         total: 0,
@@ -112,7 +135,7 @@
       addSku(row) {
 
         this.scene = 2;
-        this.$refs.sku.initSkuData(this.cForm,row);
+        this.$refs.sku.initSkuData(this.cForm, row);
       },
       //修改SPU按钮
       updateSpu(row) {
@@ -131,10 +154,36 @@
           }
 
         }
+
+      },
+      async handler(spu) {
+        this.dialogTableVisible = true
+        this.spu = spu;
+        const reslut = await this.$API.spu.reqSkuList(spu.id);
+        if (reslut.code == 200) {
+          this.loading=false
+          this.skuList = reslut.data
+          console.log(this.skuList.length);
+          if (this.skuList.length == 0) {
+            for (let i = 0; i < 5; i++) {
+              let sku = {
+                category3Id: i,
+                id: i,
+                skuName: '名' + i,
+                isSale: 1,
+                price: i + 2,
+                weight: i + 3,
+                skuDefaultImg: 'http://139.198.127.41:9000/sph/20220709/QQ图片20151121224819.jpg'
+
+              }
+              this.skuList.push(sku)
+            }
+          }
+        }
       },
       //spuForm自定义事件回调
       changeScene({scene, flag}) {
-        console.log('changeScene');
+
         this.scene = scene;
         if (flag == '修改') {
           this.getSpuList(this.page);
@@ -142,6 +191,10 @@
           this.getSpuList(1);
         }
 
+      },
+      close(){
+        this.loading=true,
+          this.skuList=[];
       }
     }
   }

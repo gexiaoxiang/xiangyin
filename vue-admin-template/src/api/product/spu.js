@@ -45,5 +45,10 @@ export const reqAddSku = (skuInfo) => request({
   method: 'post'
 })
 
+//获取SKU列表的接口
+export const reqSkuList = (spuId) => request({
+  url: `/admin/product/findBySpuId/${spuId}`,
+  method: 'get'
+})
 
 
